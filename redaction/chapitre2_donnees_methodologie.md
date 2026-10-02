@@ -4,15 +4,15 @@ Sep 28, 2026 · @elyamine
 
 ## Introduction du chapitre
 
-Ce chapitre explique d'où viennent nos données, comment nous les avons transformées et comment nous avons évalué les modèles. Tout le protocole répond à une seule contrainte : ne jamais donner au modèle une information qu'un investisseur n'aurait pas eue au moment de sa décision.
+Ce chapitre décrit d'où viennent nos données, comment nous les avons transformées et comment nous avons évalué les modèles. Une seule règle guide tout le protocole : ne jamais donner au modèle une information qu'un investisseur n'aurait pas eue au moment de décider.
 
-Nous présentons d'abord les sources (2.1), puis la construction du jeu de données mensuel (2.2). Viennent ensuite les variables à prédire (2.3) et les variables explicatives (2.4). La section 2.5 justifie le choix des modèles, et la section 2.6 décrit la façon dont nous les évaluons. Puis la section 2.7 présente les variantes testées pour vérifier la solidité des résultats, et la section 2.8 les considérations éthiques.
+Nous commençons par les sources (2.1) et la construction du jeu de données mensuel (2.2), puis nous présentons les variables à prédire (2.3) et les variables explicatives (2.4). La section 2.5 justifie le choix des modèles, la 2.6 explique comment nous les évaluons, la 2.7 décrit les variantes testées pour vérifier la solidité des résultats, et la 2.8 les considérations éthiques.
 
-Le code et les données sont conservés dans un dépôt GitHub (accessible sur demande). Chaque tableau et chaque figure de ce mémoire peut donc être recalculé à partir des fichiers bruts.
+Chaque tableau et chaque figure de ce mémoire peut être recalculé à partir des fichiers bruts, avec le code que nous avons écrit pour ce travail.
 
 ## 2.1 Sources des données
 
-Le sujet impose des données ouvertes : toutes nos sources sont publiques et gratuites. Elles couvrent la période de janvier 2013 à août 2026, en fréquence mensuelle.
+Le sujet impose des données ouvertes. Toutes nos sources sont donc publiques et gratuites. Elles couvrent la période de janvier 2013 à août 2026, en fréquence mensuelle.
 
 | Donnée | Source | Fréquence | Usage |
 | --- | --- | --- | --- |
@@ -27,7 +27,7 @@ Le sujet impose des données ouvertes : toutes nos sources sont publiques et gra
 
 La situation mensuelle budgétaire (SMB) décrit l'exécution du budget de l'État, et seulement de l'État : la Sécurité sociale et les collectivités locales n'y figurent pas. On y trouve les dépenses du budget général par titre (personnel, fonctionnement, charge de la dette, investissement, intervention, opérations financières), les prélèvements sur recettes, les principales recettes et le solde. En revanche, ces fichiers ne donnent pas le détail par mission : il est impossible, par exemple, d'isoler les dépenses de défense.
 
-Quatre caractéristiques de ces données comptent pour la suite :
+Quatre particularités de ces données comptent pour la suite :
 
 - **Les taux de l'OCDE sont des moyennes mensuelles**, pas des valeurs de fin de mois. Or la variation d'une moyenne à la suivante est un peu corrélée d'un mois sur l'autre, par simple construction. Le CAC 40, lui, est pris au dernier jour du mois.
 - **Le CAC 40 est un indice de prix**, qui ne compte pas les dividendes.
@@ -36,7 +36,7 @@ Quatre caractéristiques de ces données comptent pour la suite :
 
 ## 2.2 Construction du jeu de données
 
-Le jeu de données final compte **150 mois, de mars 2014 à août 2026**, dont 149 avec une cible (le dernier mois n'a pas encore de « mois suivant »). Une ligne correspond à la fin d'un mois t. Elle ne contient que ce qui était connu à cette date : c'est la règle qui guide toutes les étapes ci-dessous.
+Le jeu de données final compte 150 mois, de mars 2014 à août 2026, dont 149 avec une cible (le dernier mois n'a pas encore de « mois suivant »). Une ligne correspond à la fin d'un mois t. Elle ne contient que ce qui était connu à cette date : c'est la règle qui guide toutes les étapes ci-dessous.
 
 Formellement, pour chaque cible y, nous cherchons à prévoir la valeur du mois suivant à partir de l'information disponible à la fin du mois t :
 
@@ -48,7 +48,7 @@ où *M* regroupe les variables de marché et de contrôle connues à la fin du m
 
 ### 2.2.1 Des cumuls aux flux mensuels
 
-La DGFiP publie des montants **cumulés depuis le 1er janvier** : le chiffre de mars additionne janvier, février et mars. Pour retrouver ce qui a été dépensé dans le mois, nous soustrayons le cumul du mois précédent. En janvier, le flux est simplement le cumul, puisque le compteur repart de zéro.
+La DGFiP publie des montants cumulés depuis le 1er janvier : le chiffre de mars additionne janvier, février et mars. Pour retrouver ce qui a été dépensé dans le mois, nous soustrayons le cumul du mois précédent. En janvier, le flux est simplement le cumul, puisque le compteur repart de zéro.
 
 ### 2.2.2 Neutraliser la saisonnalité
 
@@ -73,11 +73,11 @@ Nous avons exclu les opérations financières. Ce sont des prises de participati
 
 ### 2.2.3 Respecter le calendrier de publication
 
-La SMB d'un mois M paraît au début du mois M+2. Nous l'avons vérifié sur plusieurs communiqués du ministère : janvier 2023 publié le 2 mars 2023, décembre 2024 le 4 février 2025, juin 2026 le 4 août 2026, juillet 2026 le 2 septembre 2026. À la fin d'un mois t, un investisseur ne connaît donc que le budget du mois t-2. **Toutes les variables budgétaires sont décalées de deux mois.** Pour les années 2014 à 2022, nous n'avons pas retrouvé les dates exactes, car les archives ne sont plus en ligne : nous supposons le même calendrier.
+La SMB d'un mois M paraît au début du mois M+2. Nous l'avons vérifié sur plusieurs communiqués du ministère : janvier 2023 publié le 2 mars 2023, décembre 2024 le 4 février 2025, juin 2026 le 4 août 2026, juillet 2026 le 2 septembre 2026. À la fin d'un mois t, un investisseur ne connaît donc que le budget du mois t-2. Toutes les variables budgétaires sont décalées de deux mois. Nous avons ensuite retrouvé 40 dates de publication entre 2017 et 2026 (annexe F) : 37 tombent au début du mois M+2 et 3, en 2019, dès la fin du mois M+1. Un décalage de deux mois n'utilise donc jamais un chiffre non encore publié ; il est au pire un peu prudent. Pour 2014-2016 et les mois non retrouvés, nous supposons le même calendrier.
 
-Le même raisonnement vaut pour l'inflation. L'INSEE publie une estimation provisoire à la fin du mois, puis l'indice définitif vers le milieu du mois suivant (pour août 2026 : le 28 août, puis le 15 septembre). Nos données sont les valeurs définitives. **L'inflation est donc décalée d'un mois.**
+Le même raisonnement vaut pour l'inflation. L'INSEE publie une estimation provisoire à la fin du mois, puis l'indice définitif vers le milieu du mois suivant (pour août 2026 : le 28 août, puis le 15 septembre). Nos données sont les valeurs définitives. L'inflation est donc décalée d'un mois.
 
-Sans ces décalages, le modèle utiliserait des chiffres que personne ne connaissait encore au moment de la prévision, et ses performances seraient gonflées artificiellement. C'est le biais d'anticipation, bien connu pour les données macroéconomiques (Croushore, 2011).
+Sans ces décalages, le modèle utiliserait des chiffres que personne ne connaissait encore au moment de la prévision. Ses performances seraient alors gonflées artificiellement. C'est le biais d'anticipation, bien connu pour les données macroéconomiques (Croushore, 2011).
 
 ### 2.2.4 Vérification de la qualité des données
 
@@ -90,15 +90,15 @@ Premier contrôle : à partir des fichiers mensuels, nous avons recalculé le so
 | 2023 | -173,0 |
 | 2024 | -155,9 |
 
-Second contrôle : un script de vérification (`tests/verifications.py`, 63 contrôles) s'assure automatiquement que chaque cible correspond bien au mois suivant, que chaque variable budgétaire vient du mois t-2, que l'inflation vient du mois t-1, et qu'aucun mois ne manque. Pour nous assurer que ce script détecte vraiment les erreurs, nous l'avons lancé sur une version du code où les décalages avaient été retirés : il les signale tous. Le jeu de données n'a aucune valeur manquante, sauf la cible du dernier mois.
+Second contrôle : un script de vérification (63 contrôles) s'assure automatiquement que chaque cible correspond bien au mois suivant, que chaque variable budgétaire vient du mois t-2, que l'inflation vient du mois t-1, et qu'aucun mois ne manque. Pour vérifier que ce script détecte bien les erreurs, nous l'avons relancé après avoir modifié volontairement le décalage budgétaire (0 puis 1 mois au lieu de 2) : il signale chaque fois un échec. Le jeu de données n'a aucune valeur manquante, sauf la cible du dernier mois.
 
 ## 2.3 Variables cibles et stationnarité
 
-Nous cherchons à prévoir trois indicateurs **pour le mois suivant (t+1)**, choisis avant d'explorer les données. Retenir les cibles les plus corrélées aux dépenses aurait créé un lien par construction, même sans lien réel.
+Nous cherchons à prévoir trois indicateurs pour le mois suivant (t+1). Nous les avons choisis avant d'explorer les données. Si nous avions retenu les cibles les plus corrélées aux dépenses, nous aurions trouvé un lien par construction, même sans lien réel.
 
 | Cible | Définition | Unité | Moyenne | Écart-type |
 | --- | --- | --- | --- | --- |
-| Variation du spread OAT–Bund (cible principale) | Spread(t+1) − spread(t), où spread = OAT 10 ans − Bund 10 ans | points de base | 0,12 | 5,27 |
+| Variation du spread OAT-Bund (cible principale) | Spread(t+1) − spread(t), où spread = OAT 10 ans − Bund 10 ans | points de base | 0,12 | 5,27 |
 | Variation du taux OAT 10 ans | OAT(t+1) − OAT(t) | points de base | 1,24 | 16,99 |
 | Rendement du CAC 40 | CAC(t+1) / CAC(t) − 1 | % | 0,53 | 4,55 |
 
@@ -114,31 +114,31 @@ Le test de Dickey-Fuller augmenté (ADF ; Dickey et Fuller, 1979) confirme que l
 | Niveau du spread | 0,31 | non |
 | Niveau de l'OAT | 0,94 | non |
 
-Pourquoi ne pas prédire directement le niveau du spread ? Parce que le spread d'un mois ressemble beaucoup à celui du mois précédent. Un modèle qui recopie la dernière valeur obtient donc un R² très élevé, sans rien avoir appris. En prédisant la variation, on oblige le modèle à anticiper ce qui change vraiment. Nous verrons au chapitre 3 que ce piège n'est pas théorique : dans le panel européen (extension E16), nos modèles atteignent plus de 90 % de R² sur le niveau du spread, tout en faisant moins bien que la simple recopie du mois précédent.
+Pourquoi ne pas prédire directement le niveau du spread ? Parce que le spread d'un mois ressemble beaucoup à celui du mois précédent : un modèle qui recopie la dernière valeur obtient un R² très élevé sans rien avoir appris. En prédisant la variation, on le force à anticiper ce qui change vraiment. Nous verrons au chapitre 3 que ce piège n'est pas théorique : dans le panel européen (extension E16), nos modèles atteignent plus de 90 % de R² sur le niveau du spread, tout en faisant moins bien que la simple recopie du mois précédent.
 
 Nous testons aussi une version plus simple dans les extensions : deviner seulement si le spread va monter ou baisser. Sur notre échantillon, il a monté dans 52 % des mois.
 
 ## 2.4 Variables explicatives
 
-Nous n'avons pas choisi les variables une à une selon leurs corrélations : nous avons construit trois jeux emboîtés, chacun contenant le précédent. Le test central du mémoire compare M0 et M1, qui ne diffèrent que par les dépenses. Si M1 prévoit mieux, l'amélioration vient donc des dépenses, **en plus** de ce que les marchés savent déjà.
+Nous n'avons pas choisi les variables une par une selon leurs corrélations. Nous avons construit trois jeux emboîtés, chacun contenant le précédent. Le test central du mémoire compare M0 et M1 : la seule différence entre les deux, ce sont les dépenses. Si M1 prévoit mieux, l'amélioration vient donc des dépenses, en plus de ce que les marchés savent déjà.
 
 | Jeu | Contenu | Nombre de variables |
 | --- | --- | --- |
-| **M0 « marchés »** | Variation du spread (t et t-1), niveau du spread, variation de l'OAT (t et t-1), rendement du CAC 40 (t et t-1), VIX et sa variation, inflation sur un an (du mois précédent), taux de la facilité de dépôt de la BCE | 11 |
-| **M1 « + dépenses »** | M0 + écart annuel des dépenses totales, de personnel, de fonctionnement, de charge de la dette, d'investissement, d'intervention et des prélèvements sur recettes (décalés de 2 mois) | 18 |
-| **M2 « + budget complet »** | M1 + recettes totales, recettes fiscales et variation du solde sur un an | 21 |
+| M0 « marchés » | Variation du spread (t et t-1), niveau du spread, variation de l'OAT (t et t-1), rendement du CAC 40 (t et t-1), VIX et sa variation, inflation sur un an (du mois précédent), taux de la facilité de dépôt de la BCE | 11 |
+| M1 « + dépenses » | M0 + écart annuel des dépenses totales, de personnel, de fonctionnement, de charge de la dette, d'investissement, d'intervention et des prélèvements sur recettes (décalés de 2 mois) | 18 |
+| M2 « + budget complet » | M1 + recettes totales, recettes fiscales et variation du solde sur un an | 21 |
 
-Les recettes et le solde sont à part, dans M2. Le titre du mémoire parle des **dépenses** : M1 répond à cette question précise, et M2 vérifie simplement si le reste du budget change la conclusion.
+Les recettes et le solde sont à part, dans M2. Le titre du mémoire parle des dépenses : M1 répond à cette question précise, et M2 vérifie simplement si le reste du budget change la conclusion.
 
 ### Deux pièges mis en évidence par l'analyse exploratoire
 
-**Premier piège : les variables en niveau.** Les dépenses sur 12 mois, en milliards d'euros, montent presque sans arrêt, avec l'inflation et la dette. Depuis 2022, les taux montent aussi. Or deux séries qui montent en même temps sont corrélées, même si elles n'ont rien à voir : la corrélation entre ces niveaux et la variation de l'OAT atteint 0,34, sans aucun sens économique. Ces niveaux ne sont pas stationnaires (p-values ADF de 0,23 à 1,00, supérieures à 0,7 pour 10 lignes sur 12). **Nos modèles utilisent donc les écarts annuels, pas les niveaux.** Ces écarts sont stationnaires ou presque (p-values ADF de 0,000 à 0,057).
+**Premier piège : les variables en niveau.** Les dépenses sur 12 mois, en milliards d'euros, montent presque sans arrêt, avec l'inflation et la dette. Depuis 2022, les taux montent aussi. Or deux séries qui montent en même temps sont corrélées, même si elles n'ont rien à voir : la corrélation entre ces niveaux et la variation de l'OAT atteint 0,34, sans aucun sens économique. Ces niveaux ne sont pas stationnaires (p-values ADF de 0,23 à 1,00, supérieures à 0,7 pour 10 lignes sur 12). Nos modèles utilisent donc les écarts annuels, pas les niveaux. Ces écarts sont stationnaires ou presque (p-values ADF de 0,000 à 0,057).
 
-**Second piège : l'inflation.** À première vue, les dépenses de personnel, de fonctionnement et la charge de la dette annoncent la variation de l'OAT (corrélations de Spearman de 0,17 à 0,23). Mais en 2022-2023, l'inflation semble avoir fait monter les deux en même temps : les taux, à cause de la BCE, et ces dépenses, à cause des salaires et de la dette indexée. Quand on retire l'effet de l'inflation et de la variation passée de l'OAT (les deux sont dans M0), ces corrélations tombent entre 0,09 et 0,15, sous le seuil de significativité (0,16). **Nous avons donc mis l'inflation dans M0**, pour ne pas attribuer aux dépenses un effet qui vient en réalité de l'inflation.
+**Second piège : l'inflation.** À première vue, les dépenses de personnel, de fonctionnement et la charge de la dette annoncent la variation de l'OAT (corrélations de Spearman de 0,17 à 0,23). Mais en 2022-2023, l'inflation semble avoir fait monter les deux en même temps : les taux, à cause de la BCE, et ces dépenses, à cause des salaires et de la dette indexée. Quand on retire l'effet de l'inflation et de la variation passée de l'OAT (les deux sont dans M0), ces corrélations tombent entre 0,09 et 0,15, sous le seuil de significativité (0,16). Nous avons donc mis l'inflation dans M0, pour ne pas attribuer aux dépenses un effet qui vient en réalité de l'inflation.
 
 ## 2.5 Modèles retenus
 
-Nous traitons le problème comme une **régression** : le modèle prédit un nombre, qui donne à la fois le sens et l'ampleur du mouvement. C'est aussi le choix des travaux de référence (Gu, Kelly et Xiu, 2020 ; Bouillot, Candelon et Kool, 2025). Nous comparons cinq approches, des plus simples aux plus flexibles :
+Nous traitons le problème comme une régression : le modèle prédit un nombre, qui donne à la fois le sens et l'ampleur du mouvement. C'est aussi le choix des travaux de référence (Gu, Kelly et Xiu, 2020 ; Bouillot, Candelon et Kool, 2025). Nous comparons cinq approches, des plus simples aux plus flexibles :
 
 | Modèle | Rôle | Justification |
 | --- | --- | --- |
@@ -166,7 +166,7 @@ La régression Ridge (Hoerl et Kennard, 1970) estime les coefficients en pénali
 
 Plus α est grand, plus les coefficients sont ramenés vers zéro. Quand α tend vers l'infini, la prévision se réduit à la constante, c'est-à-dire à la moyenne d'entraînement : choisir un α très élevé revient à dire que les variables n'apportent pas de signal.
 
-Ces valeurs sont prudentes : des arbres peu profonds apprennent moins le bruit d'un petit échantillon. Un point demande toutefois de la transparence : contrairement aux extensions (section 2.7), ces réglages n'ont pas été datés dans le dépôt avant les premiers résultats : le code et les résultats ont été enregistrés ensemble. Pour vérifier que ce choix ne change pas les conclusions, nous l'avons remis en cause de deux façons : l'extension E10 règle XGBoost automatiquement par validation croisée temporelle, et un contrôle relance la forêt aléatoire et XGBoost avec plusieurs graines aléatoires (annexe).
+Ces valeurs sont prudentes : des arbres peu profonds apprennent moins le bruit d'un petit échantillon. Nous devons toutefois être transparents sur un point. Contrairement aux extensions (section 2.7), ces réglages n'ont pas été datés avant les premiers résultats : le code et les résultats ont été enregistrés ensemble. Pour vérifier que ce choix ne change pas les conclusions, nous l'avons remis en cause de deux façons : l'extension E10 règle XGBoost automatiquement par validation croisée temporelle, et un contrôle relance la forêt aléatoire et XGBoost avec plusieurs graines aléatoires (annexe).
 
 ## 2.6 Protocole d'évaluation
 
@@ -174,13 +174,13 @@ Nous évaluons les modèles comme s'ils avaient été utilisés en vrai, mois ap
 
 ### 2.6.1 Validation glissante
 
-Une validation croisée classique tire les mois au hasard. Le modèle pourrait alors apprendre sur 2024 pour prévoir 2021, ce qui n'a aucun sens pour une prévision. Nous utilisons donc une **validation glissante à fenêtre croissante** :
+Une validation croisée classique tire les mois au hasard. Le modèle pourrait alors apprendre sur 2024 pour prévoir 2021, ce qui n'a aucun sens pour une prévision. Nous utilisons donc une validation glissante à fenêtre croissante :
 
 1. Fin janvier 2020, le modèle est entraîné sur les 70 mois précédents et prévoit la variation de février 2020.
 2. Fin février 2020, il est réentraîné en ajoutant un mois, puis prévoit mars 2020.
 3. L'opération est répétée chaque mois jusqu'à fin juillet 2026 (prévision d'août 2026).
 
-La période de test compte **79 mois**. Dans tout le mémoire, elle est désignée par les mois où la prévision est faite (janvier 2020 à juillet 2026) ; les variations prévues vont de février 2020 à août 2026. Elle traverse des contextes très différents : le Covid-19, la hausse des taux de la BCE à partir de 2022, puis les tensions politiques et budgétaires françaises de 2024 à 2026.
+La période de test compte 79 mois. Dans tout le mémoire, elle est désignée par les mois où la prévision est faite (janvier 2020 à juillet 2026) ; les variations prévues vont de février 2020 à août 2026. Elle traverse des contextes très différents : le Covid-19, la hausse des taux de la BCE à partir de 2022, puis les tensions politiques et budgétaires françaises de 2024 à 2026.
 
 ### 2.6.2 Mesures de performance
 
@@ -201,7 +201,7 @@ où y\_t est la valeur observée, ŷ\_t la prévision du modèle et ȳ\_t la moy
 
 ### 2.6.3 Tests statistiques
 
-Un modèle peut faire un peu mieux qu'un autre par pur hasard. Pour le savoir, nous utilisons le **test de Diebold et Mariano (1995)**, avec la correction de Harvey, Leybourne et Newbold (1997) pour les petits échantillons. Il nous dit si l'écart d'erreurs entre deux modèles est assez grand pour ne pas être dû au hasard. Nous l'appliquons à trois comparaisons :
+Un modèle peut faire un peu mieux qu'un autre par pur hasard. Pour le savoir, nous utilisons le test de Diebold et Mariano (1995), avec la correction de Harvey, Leybourne et Newbold (1997) pour les petits échantillons. Il nous dit si l'écart d'erreurs entre deux modèles est assez grand pour ne pas être dû au hasard. Nous l'appliquons à trois comparaisons :
 
 - M1 contre M0 pour chaque modèle (test de l'hypothèse H1) ;
 - chaque modèle contre la prévision « variation nulle » ;
@@ -217,11 +217,11 @@ où le numérateur est la moyenne des écarts *d* et γ̂ leur variance. *DM*\* 
 
 ### 2.6.4 Importance des variables
 
-Pour savoir quelles dépenses le modèle utilise le plus (hypothèse H4), nous calculons les **valeurs SHAP** de XGBoost (Lundberg et Lee, 2017). Elles indiquent combien chaque variable pèse, en moyenne, dans les prédictions. Deux précautions s'imposent. D'abord, elles sont calculées sur tout l'échantillon : elles décrivent ce que le modèle utilise, pas ce qui améliore la prévision. Ensuite, une part d'importance ne veut rien dire sans point de comparaison. Nous la comparons donc à la part obtenue par sept variables de pur bruit, tirées au hasard, placées au même endroit que les dépenses.
+Pour savoir quelles dépenses le modèle utilise le plus (hypothèse H4), nous calculons les valeurs SHAP de XGBoost (Lundberg et Lee, 2017). Elles indiquent combien chaque variable pèse, en moyenne, dans les prédictions. Deux précautions s'imposent. D'abord, elles sont calculées sur tout l'échantillon : elles décrivent ce que le modèle utilise, pas ce qui améliore la prévision. Ensuite, une part d'importance ne veut rien dire sans point de comparaison. Nous la comparons donc à la part obtenue par sept variables de pur bruit, tirées au hasard, placées au même endroit que les dépenses.
 
 ### 2.6.5 Contrôles de solidité
 
-Après les premiers résultats, nous avons ajouté cinq contrôles, décrits ici et rapportés au chapitre 3 (quatre en section 3.3, le cinquième en section 3.4) :
+Après les premiers résultats, nous avons ajouté cinq contrôles, décrits ici et rapportés au chapitre 3 :
 
 - **Graine aléatoire** : la forêt aléatoire et XGBoost sont réestimés avec 5 et 10 graines différentes.
 - **Contrôle positif (puissance)** : on ajoute à M0 une variable fictive construite pour avoir une corrélation ρ donnée avec la cible (ρ = 0,1 ; 0,2 ; 0,3 ; 0,5 et 1), avec 10 tirages par valeur (un seul pour ρ = 1, où le résultat ne dépend pas du tirage), pour mesurer ce que le dispositif est capable de détecter.
@@ -231,11 +231,11 @@ Après les premiers résultats, nous avons ajouté cinq contrôles, décrits ici
 
 ## 2.7 Extensions datées avant exécution et correction des tests multiples
 
-Un résultat pourrait dépendre d'un choix particulier : l'horizon, le modèle, la période. Pour le vérifier, nous avons décliné le protocole principal en vingt extensions, dont dix-neuf ont pu être réalisées (E14 n'a pas pu l'être, faute de données quotidiennes). **Avant de lancer chaque extension, nous avons daté sa liste et son protocole dans le dépôt GitHub**, et nous rapportons tous les résultats, favorables ou non.
+Un résultat pourrait dépendre d'un choix particulier : l'horizon, le modèle, la période. Pour le vérifier, nous avons décliné le protocole principal en vingt extensions, dont dix-neuf ont pu être réalisées (E14 n'a pas pu l'être sur le spread, faute de taux quotidiens ; une version limitée au CAC 40 a été faite après coup, annexe F). Avant de lancer chaque extension, nous avons daté sa liste et son protocole dans l'historique de notre travail, et nous rapportons tous les résultats, favorables ou non.
 
 Cette précaution répond à un risque bien décrit par Bailey et al. (2014) : à force d'essayer des configurations, on finit toujours par en trouver une qui semble marcher, par hasard.
 
-Le pré-enregistrement s'est fait en plusieurs étapes, et nous préférons le dire clairement. E1 à E13 ont été fixées ensemble le 26 septembre 2026, après les résultats du modèle principal mais avant toute extension. E14 à E16 ont été ajoutées avant leur collecte de données. E17 à E20, en revanche, ont été ajoutées le 27 septembre **après** avoir vu les résultats d'E15 et E16 (pré-enregistrement à 13 h 03, résultats d'E15 et E16 à 12 h 57). E19 et E20 ont été fixées avant la collecte de leurs données. E17 et E18, elles, réutilisent les données du panel d'E15 et E16, déjà collectées : seul leur protocole a été daté avant leur exécution. E18 est donc présentée comme exploratoire, car son idée vient directement d'un résultat d'E15.
+Le pré-enregistrement s'est fait en plusieurs étapes, et nous préférons le dire clairement. E1 à E13 ont été fixées ensemble le 26 septembre 2026, après les résultats du modèle principal mais avant toute extension. E14 à E16 ont été ajoutées avant leur collecte de données. E17 à E20, en revanche, ont été ajoutées le 27 septembre après avoir vu les résultats d'E15 et E16 (pré-enregistrement à 13 h 03, résultats d'E15 et E16 à 12 h 57). E19 et E20 ont été fixées avant la collecte de leurs données. E17 et E18, elles, réutilisent les données du panel d'E15 et E16, déjà collectées : seul leur protocole a été daté avant leur exécution. E18 est donc présentée comme exploratoire, car son idée vient directement d'un résultat d'E15.
 
 | # | Extension | Justification |
 | --- | --- | --- |
@@ -252,11 +252,11 @@ Le pré-enregistrement s'est fait en plusieurs étapes, et nous préférons le d
 | E11 | Fenêtre glissante de 60 mois | S'adapter au changement de régime de 2022 (Pesaran et Timmermann, 2007) |
 | E12 | Évaluation par période (2020-2021, 2022-2026, marchés calmes ou agités) | Un apport peut être limité aux périodes de tension |
 | E13 | Notations souveraines de la France | Contrôle du risque perçu par les agences |
-| E14 | Étude d'événement autour des dates de publication (non réalisée : taux quotidiens introuvables) | Le marché intègre-t-il l'information budgétaire le jour même ? |
+| E14 | Étude d'événement autour des dates de publication (non réalisée sur le spread, faute de taux quotidiens ; version préliminaire sur le CAC 40, annexe F) | Le marché intègre-t-il l'information budgétaire le jour même ? |
 | E15 | Panel européen trimestriel (5 pays, Eurostat) | Plus d'observations, inclusion de la crise de la dette 2010-2012 |
 | E16 | Panel européen mensuel avec une base large de variables | Répliquer le cadre de Bouillot et al. (2025) en le comparant à la marche aléatoire |
-| E17 | Panel annuel (valeurs de décembre) | Les finances publiques agiraient à basse fréquence (Codogno et al., 2003 ; Afonso et al., 2015) |
-| E18 | Régime de crise (exploratoire) | Les marchés ne regarderaient le budget qu'en période de tension (Afonso et al., 2015) |
+| E17 | Panel annuel (valeurs de décembre) | Les finances publiques agiraient à basse fréquence |
+| E18 | Régime de crise (exploratoire) | Les marchés ne regarderaient le budget qu'en période de tension |
 | E19 | Actions des secteurs liés à la dépense publique (BTP, défense) | Canal des revenus des entreprises |
 | E20 | Incertitude de politique économique (indice européen de Baker, Bloom et Davis, 2016) | Contrôler l'incertitude politique ; l'indice français n'étant pas disponible, nous avons déclaré ce changement avant l'exécution |
 
@@ -264,7 +264,7 @@ Pour les horizons de plus d'un mois (E1), une difficulté apparaît : à la date
 
 ### Correction des tests multiples
 
-Avec plus de 150 comparaisons, environ une sur vingt paraîtrait significative au seuil de 5 %, par pur hasard. Nous corrigeons donc toutes les p-values « avec dépenses contre sans dépenses » par la **procédure de Benjamini et Hochberg (1995)**, avec un taux de fausses découvertes de 10 %. Nous ne considérons comme significatifs que les résultats qui résistent à cette correction. Elle porte sur 168 comparaisons (dont E20a, qui compare avec et sans l'indice d'incertitude) ; les ventilations par sous-période (E12, E18) en sont exclues car elles ne sont pas des tests indépendants. La même correction est appliquée séparément aux 18 tests de H1 du modèle principal. Pour la correction, nous utilisons la p-value unilatérale (« avec dépenses meilleur que sans ») ; les tableaux descriptifs donnent la p-value bilatérale.
+Avec plus de 150 comparaisons, environ une sur vingt paraîtrait significative au seuil de 5 %, par pur hasard. Nous corrigeons donc toutes les p-values « avec dépenses contre sans dépenses » par la procédure de Benjamini et Hochberg (1995), avec un taux de fausses découvertes de 10 %. Nous ne considérons comme significatifs que les résultats qui résistent à cette correction. Elle porte sur 168 comparaisons (dont E20a, qui compare avec et sans l'indice d'incertitude) ; les ventilations par sous-période (E12, E18) en sont exclues car elles ne sont pas des tests indépendants. La même correction est appliquée séparément aux 18 tests de H1 du modèle principal. Pour la correction, nous utilisons la p-value unilatérale (« avec dépenses meilleur que sans ») ; les tableaux descriptifs donnent la p-value bilatérale.
 
 La procédure est la suivante. Les *m* p-values sont classées par ordre croissant, de la plus petite, *p*(1), à la plus grande, *p*(*m*). On cherche le plus grand rang *k* tel que :
 
@@ -276,37 +276,37 @@ et l'on déclare significatives les k premières comparaisons. De façon équiva
 
 ## 2.8 Considérations éthiques
 
-**Données.** Toutes les données utilisées sont publiques et en accès libre : situations budgétaires de l'État (data.economie.gouv.fr), séries de marché et macroéconomiques (FRED, BCE, Eurostat), indices boursiers. Elles ne contiennent aucune donnée personnelle, et sont utilisées dans le respect des conditions de réutilisation de chaque fournisseur (licence ouverte pour les données publiques françaises). Les sources sont citées, et la liste des fichiers bruts est figée dans le dépôt (manifeste des données).
+**Données.** Toutes les données utilisées sont publiques et en accès libre : situations budgétaires de l'État (data.economie.gouv.fr), séries de marché et macroéconomiques (FRED, BCE, Eurostat), indices boursiers. Elles ne contiennent aucune donnée personnelle, et sont utilisées dans le respect des conditions de réutilisation de chaque fournisseur (licence ouverte pour les données publiques françaises). Les sources sont citées, et la liste des fichiers bruts est figée (manifeste des données).
 
-**Transparence et résultats négatifs.** Le code, les données traitées et les résultats sont conservés dans un dépôt GitHub (accessible sur demande), et l'ensemble peut être relancé avec un seul script. Le plan des extensions a été daté avant leur exécution. Nous rapportons tous les résultats, y compris négatifs, et corrigeons pour les tests multiples. Ne publier que les résultats favorables donnerait une image fausse de ce que les données permettent ; c'est un problème connu en finance empirique (Bailey et al., 2014).
+**Transparence et résultats négatifs.** Le code, les données traitées et les résultats sont conservés, et l'ensemble peut être relancé avec un seul script. Le plan des extensions a été daté avant leur exécution. Nous rapportons tous les résultats, y compris négatifs, et corrigeons pour les tests multiples. Ne publier que les résultats favorables donnerait une image fausse de ce que les données permettent ; c'est un problème connu en finance empirique (Bailey et al., 2014).
 
 **Usage des résultats.** Ce travail n'est pas un conseil en investissement. Un modèle qui paraît prédire les marchés peut conduire à des décisions coûteuses s'il est mal évalué ; c'est pourquoi nous insistons sur la comparaison à des références simples.
 
-**Outils d'intelligence artificielle.** Des outils d'IA générative ont été utilisés pour l'aide à la programmation, la relecture du code et l'aide à la rédaction. Leur usage est décrit dans la déclaration prévue par le guide de l'ECE. Les choix de recherche, la validation des résultats et les interprétations relèvent de l'auteur.
+**Outils d'intelligence artificielle.** Conformément au guide de l'ECE, nous déclarons avoir utilisé un outil d'intelligence artificielle générative (Claude, d'Anthropic) comme assistant pour la programmation et la rédaction. Le choix du sujet, de la problématique et du périmètre et les décisions de méthode relèvent de l'auteur, qui a relu l'ensemble du texte et du code, et en assume la responsabilité.
 
 ## Références ajoutées par ce chapitre
 
-- Baker, S. R., Bloom, N., & Davis, S. J. (2016). Measuring economic policy uncertainty. *The Quarterly Journal of Economics*, *131*(4), 1593–1636. https://doi.org/10.1093/qje/qjw024
-- Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, *57*(1), 289–300. https://doi.org/10.1111/j.2517-6161.1995.tb02031.x
-- Brier, G. W. (1950). Verification of forecasts expressed in terms of probability. *Monthly Weather Review*, *78*(1), 1–3. <https://doi.org/10.1175/1520-0493(1950)078%3C0001:VOFEIT%3E2.0.CO;2>
-- Codogno, L., Favero, C., & Missale, A. (2003). Yield spreads on EMU government bonds. *Economic Policy*, *18*(37), 503–532.
-- Dickey, D. A., & Fuller, W. A. (1979). Distribution of the estimators for autoregressive time series with a unit root. *Journal of the American Statistical Association*, *74*(366), 427–431. https://doi.org/10.1080/01621459.1979.10482531
-- Harvey, D., Leybourne, S., & Newbold, P. (1997). Testing the equality of prediction mean squared errors. *International Journal of Forecasting*, *13*(2), 281–291. https://doi.org/10.1016/S0169-2070(96)00719-4
-- Hoerl, A. E., & Kennard, R. W. (1970). Ridge regression: Biased estimation for nonorthogonal problems. *Technometrics*, *12*(1), 55–67. https://www.jstor.org/stable/1267351
-- Lundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. *Advances in Neural Information Processing Systems*, *30*.
-- Newey, W. K., & West, K. D. (1987). A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. *Econometrica*, *55*(3), 703–708. https://doi.org/10.2307/1913610
-- Pesaran, M. H., & Timmermann, A. (2007). Selection of estimation window in the presence of breaks. *Journal of Econometrics*, *137*(1), 134–161. https://doi.org/10.1016/j.jeconom.2006.03.010
-- Timmermann, A. (2006). Forecast combinations. In G. Elliott, C. W. J. Granger, & A. Timmermann (Eds.), *Handbook of economic forecasting* (Vol. 1, pp. 135–196). North-Holland.
-- Zou, H., & Hastie, T. (2005). Regularization and variable selection via the elastic net. *Journal of the Royal Statistical Society: Series B*, *67*(2), 301–320. https://doi.org/10.1111/j.1467-9868.2005.00503.x
+- Baker, S. R., Bloom, N., & Davis, S. J. (2016). Measuring economic policy uncertainty. *The Quarterly Journal of Economics*, 131(4), 1593–1636. [https://doi.org/10.1093/qje/qjw024](https://doi.org/10.1093/qje/qjw024)
+
+À intégrer à la bibliographie générale (les autres références citées figurent déjà au chapitre 1).
+
+- Brier, G. W. (1950). Verification of forecasts expressed in terms of probability. *Monthly Weather Review*, 78(1), 1–3. [https://doi.org/10.1175/1520-0493%281950%29078%3C0001:VOFEIT%3E2.0.CO;2](https://doi.org/10.1175/1520-0493%281950%29078%3C0001:VOFEIT%3E2.0.CO;2)
+- Hoerl, A. E., & Kennard, R. W. (1970). Ridge regression: Biased estimation for nonorthogonal problems. *Technometrics*, 12(1), 55–67. [https://doi.org/10.1080/00401706.1970.10488634](https://doi.org/10.1080/00401706.1970.10488634)
+- Newey, W. K., & West, K. D. (1987). A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. *Econometrica*, 55(3), 703–708. [https://doi.org/10.2307/1913610](https://doi.org/10.2307/1913610)
+- Pesaran, M. H., & Timmermann, A. (2007). Selection of estimation window in the presence of breaks. *Journal of Econometrics*, 137(1), 134–161. [https://doi.org/10.1016/j.jeconom.2006.03.010](https://doi.org/10.1016/j.jeconom.2006.03.010)
+- Timmermann, A. (2006). Forecast combinations. In G. Elliott, C. W. J. Granger, & A. Timmermann (Eds.), *Handbook of economic forecasting* (Vol. 1, pp. 135–196). North-Holland. [https://doi.org/10.1016/S1574-0706(05)01004-9](https://doi.org/10.1016/S1574-0706(05)01004-9)
+- Zou, H., & Hastie, T. (2005). Regularization and variable selection via the elastic net. *Journal of the Royal Statistical Society: Series B*, 67(2), 301–320. [https://doi.org/10.1111/j.1467-9868.2005.00503.x](https://doi.org/10.1111/j.1467-9868.2005.00503.x)
+- Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300. [https://doi.org/10.1111/j.2517-6161.1995.tb02031.x](https://doi.org/10.1111/j.2517-6161.1995.tb02031.x)
+- Dickey, D. A., & Fuller, W. A. (1979). Distribution of the estimators for autoregressive time series with a unit root. *Journal of the American Statistical Association*, 74(366), 427–431. [https://doi.org/10.2307/2286348](https://doi.org/10.2307/2286348)
+- Harvey, D., Leybourne, S., & Newbold, P. (1997). Testing the equality of prediction mean squared errors. *International Journal of Forecasting*, 13(2), 281–291. [https://doi.org/10.1016/S0169-2070(96)00719-4](https://doi.org/10.1016/S0169-2070(96)00719-4)
+- Lundberg, S. M., & Lee, S.-I. (2017). A unified approach to interpreting model predictions. *Advances in Neural Information Processing Systems*, 30. [https://papers.nips.cc/paper/2017/hash/8a20a8621978632d76c43dfd28b67767-Abstract.html](https://papers.nips.cc/paper/2017/hash/8a20a8621978632d76c43dfd28b67767-Abstract.html)
 
 ## Sources en ligne
 
 - [Situations mensuelles budgétaires de l'État, séries longues](https://data.economie.gouv.fr/explore/assets/situations-mensuelles-budgetaires-series-longues/), data.economie.gouv.fr.
 - [La situation mensuelle de l'État](https://www.economie.gouv.fr/dgfip/la-situation-mensuelle-de-letat), DGFiP (dates de publication).
-- [Dépôt du projet](https://github.com/lyaminedb1/public-spending-market-prediction), GitHub (code, données, plan daté des extensions `docs/plan_extensions.md`).
 - [FRED](https://fred.stlouisfed.org), Federal Reserve Bank of St. Louis (taux OAT et Bund, séries OCDE, VIX).
 - [Portail de données de la BCE](https://data.ecb.europa.eu) (taux directeurs).
 - [Eurostat](https://ec.europa.eu/eurostat) (IPCH, finances publiques trimestrielles).
 - [Yahoo Finance](https://finance.yahoo.com) (CAC 40 et actions sectorielles).
 - [Economic Policy Uncertainty](https://www.policyuncertainty.com) (indice européen d'incertitude).
-- Fitch Ratings, Moody's et S&P Global Ratings. Communiqués relatifs à la note de la France, 2023-2025 (liste datée dans `data/raw/ratings_france.csv` du dépôt du projet).

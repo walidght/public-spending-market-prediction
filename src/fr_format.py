@@ -1,34 +1,18 @@
-"""
-fr_format.py : virgule décimale dans les figures (usage français du mémoire).
-
-fr(fig) : à appeler juste avant fig.savefig(...).
-  - graduations numériques (ScalarFormatter) : « 1.20 » -> « 1,20 » ;
-  - textes libres (annotations, notes de bas de figure) : « 0.12 » -> « 0,12 » (chiffre.point.chiffre seulement).
-Les valeurs ne changent pas, seulement le format d'affichage.
-"""
+"""fr_format.py : virgule décimale dans toutes les figures (le mémoire est en français).
+Importer ce module avant de créer les figures : les textes (graduations, annotations, légendes) qui contiennent
+un nombre à point décimal (« 0.12 ») s'affichent avec une virgule (« 0,12 »). Aucun effet sur les calculs ni les CSV."""
 import re
 
-from matplotlib.ticker import ScalarFormatter
+import matplotlib.text as mtext
 
-_DECIMAL = re.compile(r"(\d)\.(\d)")
-
-
-class _FrScalar(ScalarFormatter):
-    def __call__(self, x, pos=None):
-        return super().__call__(x, pos).replace(".", ",")
+_PT = re.compile(r"(?<=\d)\.(?=\d)")
+_set_text = mtext.Text.set_text
 
 
-def _fr_text(s: str) -> str:
-    return _DECIMAL.sub(r"\1,\2", s)
+def _set_text_fr(self, s):
+    if isinstance(s, str):
+        s = _PT.sub(",", s)
+    return _set_text(self, s)
 
 
-def fr(fig):
-    for ax in fig.axes:
-        for axis in (ax.xaxis, ax.yaxis):
-            if type(axis.get_major_formatter()) is ScalarFormatter:
-                axis.set_major_formatter(_FrScalar())
-        for t in ax.texts:
-            t.set_text(_fr_text(t.get_text()))
-    for t in fig.texts:
-        t.set_text(_fr_text(t.get_text()))
-    return fig
+mtext.Text.set_text = _set_text_fr

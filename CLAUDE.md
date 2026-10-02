@@ -131,11 +131,38 @@
 - Citations : numérotées [n] cliquables dans le Word/PDF (style IEEE, liste alphabétique), conversion automatique par `redaction/outils/citations.py` ; les sources restent en auteur-année.
 - Refus : pas de substitution de caractères (omicron) pour tromper les détecteurs ; déclaration d'usage de l'IA à rédiger.
 - 30/09 : PR n°1 (travail parallèle de Walid, 29-30/09) fusionnée dans main ; résultats identiques aux nôtres (écart max 0,15 pt de R²).
-- 01/10 : chapitre 4 final (4.1 à 4.8, ≈ 3 100 mots, citations et renvois vérifiés) ; bibliographie portée à 47 références (10 ajoutées pour les méthodes et la discussion, DOI confirmés par recherche, format APA harmonisé) ; citations de méthode ajoutées au chapitre 2 ; phrase Medeiros / Goulet Coulombe corrigée au chapitre 1. Détails et points non vérifiables : `docs/notes_chapitre4_biblio.md`.
+
+## Mise à jour du 1/10 (soir)
+- **Bouillot et al. (2025) : article relu en entier le 1/10 (fichier LFIN_DP_2025-04_2) : chiffres confirmés (13 méthodes, 4 948 séries, 10 pays, déc. 2008-févr. 2025 ; R² XGBoost 0,81-0,99, France 0,864 ; RMSE France 7,27 pb, tableau 11, jan. 2020-févr. 2025 ; 1 variable « Government Finance & Debt » sur 50, tableau 12 ; Belgique et Espagne : LASSO/Elastic Net ont un RMSE plus faible que XGBoost, tableau 7). Cette version ne compare pas à la marche aléatoire ; le résumé d'une version plus récente en ligne dit que AR(1) et marche aléatoire font mieux que le ML dans chaque pays : les deux sont dits dans les ch. 1 et 4.** Définition du spread (moyenne ou fin de mois) non précisée (source Bloomberg).
+- Chapitre 4 réécrit et raccourci (9 p.) ; déclaration IA : version courte voulue par Elyamine (usage déclaré, sans détail ; on n'y affirme plus que les interprétations « relèvent de l'auteur », il réécrira le ch. 4 lui-même après la remise).
+- Références : DOI vérifiés par Crossref (31 liens), pages ECB, NeurIPS, theses.fr vérifiées ; numérotées [n] et cliquables. Figures en virgule décimale (`src/fr_format.py`). PDF : 86 p.
+- **Avant l'envoi : le PDF de ce dépôt est mis en page avec Liberation Serif (substitut de Times New Roman, absent du conteneur). Le Word (`Memoire_DaliBraham.docx`) est déjà en Times New Roman : l'ouvrir dans Word, mettre à jour les champs (Ctrl+A, F9) et exporter le PDF.**
+- Construction du Word/PDF : `pip install python-docx pypandoc_binary`, `apt install libreoffice-writer fonts-liberation`.
+
+## Mise à jour du 2/10 (nuit)
+- Revue globale : jeu de données reconstruit à l'identique (écart 0), Ridge M0/M1/M2, DM et BH (H1 et 168 comparaisons) recalculés indépendamment (écarts < 0,001) ; 63 contrôles OK ; chiffres de ch. 2-3 recoupés (IS −449/+470 % janv., −902/+1 789 % févr., opérations financières −462 %, écart-type 0,7 → 4,4). Seule correction : 2.2.4 (le script de vérification signale un échec quand on modifie le décalage, il ne « les signale pas tous »).
+- Dates de publication de la SMB 2017-2026 (40 publications, 29 à 47 jours après la fin du mois) : `data/raw/smb_publication_dates.csv` (branche `claude/relaxed-gauss-3dvh8s` uniquement). Étude d'événement CAC 40 (plan daté `docs/plan_etude_evenement.md`, `src/23_event_study.py`) : nulle (ρ = −0,13, p = 0,42, n = 40) ; rien ajouté au mémoire. Spread quotidien : sources inaccessibles.
+- Style (demande d'Elyamine : moins de tics typographiques) : passe de lisibilité sur tout le mémoire : gras retiré du texte courant (sauf deux résultats clés), légendes « Tableau 3.1 : … » et titres « Chapitre 1 : … » avec deux-points, plus de tirets demi-cadratins ni de barres obliques entre mots, listes « Ce que nous en retenons » du ch. 1 en paragraphes. Déclaration IA inchangée (courte). Pas de manœuvre contre les détecteurs.
+
+## Mise à jour du 2/10 (matin)
+- Étude d'événement préliminaire sur le CAC 40 intégrée au mémoire (annexe G, section 3.5, ch. 4.2) : 40 publications 2017-2026, ρ = −0,13 (p = 0,42), jour +1 ρ = 0,00 (p = 0,99), |rendement| 0,70 % vs 0,79 % (p = 0,74). Plan daté avant exécution (`docs/plan_etude_evenement.md`), `src/23_event_study.py`, `data/raw/smb_publication_dates.csv`, `data/raw/cac40_daily.csv` ; manifeste régénéré. Le spread reste non testé en quotidien (E14 non réalisée sur le spread). Les « dix-neuf extensions » restent les 19 pré-enregistrées.
+- Chapitre 4 : arguments ajoutés (retard de publication non en cause : lag 1 et 3 mois ; sens de l'effet ambigu, E5/E18 ; plus de données ne suffiraient probablement pas : E15/E16).
+
+## Mise à jour du 2/10 (après la PR n°2 de Walid)
+- PR n°2 (walidght, ouverte, non fusionnée : conflits avec `main`) examinée : rapport `docs/revue_redaction.md` et `docs/questions_chapitre4.md` repris dans `main` ; reprises vérifiées : correction Medeiros / Goulet Coulombe (ch. 1, résumé Crossref), 8 références de méthode ajoutées avec DOI contrôlés par Crossref (Hoerl et Kennard, Newey et West, Brier, Zou et Hastie, Timmermann, Pesaran et Timmermann, Strobl et al., MacKinlay ; 45 références au total), légende du tableau 3.1, « un cinquième contrôle » (3.3), sources de l'introduction, annonce de 2.8, fourchette périmée de `src/21`. Non reprises : son chapitre 4 (le nôtre est plus à jour), Codogno et al. et Leeper et al. (non vérifiés), sa version de `fr_format.py`. Nombre de pages du PDF : 90.
+- Le dépôt GitHub est **public** (API sans authentification : 200) : le texte « accessible sur demande » a été remplacé par « lien dans les sources en ligne ».
+
+## Mise à jour du 2/10 (midi)
+- Demande d'Elyamine : ne plus mentionner GitHub ni les chemins de fichiers dans le mémoire (non exigé). Fait : annexe « Code et reproductibilité » supprimée, annexe de l'étude d'événement devenue **annexe F**, lien et sources du dépôt retirés, légendes « Source : calculs de l'auteur » sans chemins. La datation des extensions est dite « dans l'historique de notre travail ».
+- Passe de naturalisation plus poussée sur le résumé, l'introduction, la conclusion et le ch. 4 (déclaration IA inchangée, courte). PDF : 90 p.
+
+- Guide ECE relu (section 6.4, « Ethical Use of AI Tools ») : déclarer l'usage de l'IA « either in the methodology section or acknowledgements », sans page dédiée. Page « Déclaration d'utilisation de l'IA » supprimée ; la déclaration est dans 2.8 (« Outils d'intelligence artificielle », Claude d'Anthropic, programmation, relecture du code, rédaction). Interdit par le guide : rendre des interprétations générées par l'IA sans relecture critique ni apport personnel. PDF : 88 p.
+
+- Langue du Word fixée en fr-FR (`redaction/outils/langue_fr.py`, `pandoc -M lang=fr-FR`) : le correcteur soulignait tout. Intertitres de paragraphe en gras rétablis (« Données. », « Graine aléatoire. », glossaire, listes H1-H4, etc.) : sans le gras, on ne voyait plus que c'étaient des titres. PDF : 87 p.
 
 ## Prochaines étapes (au 30/09 soir ; remise le 2/10 à minuit)
 0. Plan serré : mercredi soir ch. 4 complet (brouillon) + éthique (ch. 2, fait : 2.8) ; jeudi introduction, conclusion, résumé, annexes, pages de garde, revue de Walid en parallèle ; vendredi corrections, PDF, envoi en fin d'après-midi. Abandonné : raccourcir le ch. 3, glossaire détaillé.
-1. Chapitre 4 (Discussion) : **rédigé en version finale le 01/10 à la demande d'Elyamine** (relayée par Walid) à partir de `docs/plan_chapitre4.md` et du brouillon du 30/09. Règle ECE : Elyamine doit le relire et l'adapter avec ses mots ; la déclaration d'usage de l'IA doit rester fidèle (voir `docs/notes_chapitre4_biblio.md`).
+1. Chapitre 4 (Discussion, 6-8 p.) à partir de `docs/plan_chapitre4.md` : l'interprétation vient d'Elyamine (règle ECE) ; méthode : questions guidées, il répond, Claude vérifie et corrige la langue.
 2. Ch. 2 : considérations éthiques ; ch. 3 : raccourcir + ajouts ci-dessus.
 3. Introduction, conclusion, résumé + mots-clés, déclaration d'usage de l'IA, annexes (détail E1-E20, graines, bruit), pages de garde.
 4. Vérifier sur les articles les chiffres cités au ch. 1 (Bouillot, Laubach…) ; dates des événements du ch. 4.
@@ -161,3 +188,8 @@ Bouillot, Candelon & Kool (2025), *Forecasting European sovereign spreads using 
 
 ## Plan du mémoire
 Introduction · Ch.1 État de l'art (rédigé) · Ch.2 Données et méthodologie · Ch.3 Résultats · Ch.4 Discussion · Conclusion · Bibliographie · Annexes.
+
+## Mise à jour du 2/10 (après-midi, relecture de la version finale d'Elyamine)
+- Relecture complète du PDF exporté par Word. Corrigé dans les sources et le Word : « Résultatss » (coquille Word), phrase fautive 1.2.2 (Attinasi), déclaration IA reprise telle qu'Elyamine l'a modifiée (« programmation et rédaction », « relu l'ensemble du texte et du code »), page blanche après le ch. 1 (sauts de page → « saut de page avant »), signe moins typographique (Word coupait « - » et le nombre en fin de ligne), colonnes du tableau B.1, titre des propriétés du PDF, source isolée en 3.3 et 3.4, paragraphe de permutation clarifié.
+- Incohérence de fond corrigée : le texte disait le décalage de publication vérifié seulement sur 2023-2026, alors que l'annexe F contient 40 dates (2017-2026) : 37 en M+2, 3 (2019) dès la fin de M+1 → le décalage de 2 mois n'utilise jamais un chiffre non publié (au pire un peu prudent). 2.2.3, 3.3 et 4.7 mis à jour. PDF : 81 p. (sommaire vérifié : 88 entrées, 0 écart).
+

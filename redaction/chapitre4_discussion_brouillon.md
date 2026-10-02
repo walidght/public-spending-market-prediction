@@ -1,139 +1,127 @@
 # Mémoire — Chapitre 4 : Discussion
 
-Oct 1, 2026 · @elyamine
+Oct 2, 2026 · @elyamine
+
 
 ## 4.1 Réponse à la problématique
 
-Notre question était la suivante : peut-on prédire des indicateurs des marchés financiers à partir des données ouvertes de dépenses publiques, en utilisant des techniques de machine learning ?
+Notre question de départ était simple : les données ouvertes de dépenses publiques permettent-elles de prévoir des indicateurs des marchés financiers avec du machine learning ?
 
-Sur les données françaises, à un horizon d'un mois, nous ne trouvons **aucune preuve** que les dépenses de l'État améliorent la prévision du spread OAT–Bund, du taux OAT ou du CAC 40. Ce résultat tient pour les trois modèles, pour les dix-neuf extensions réalisées, avec un décalage de publication d'un à trois mois et après correction pour les tests multiples. Aucune des quatre hypothèses n'est validée (tableau 3.8).
+Pour la France et à un mois, la réponse est non. Nous ne trouvons **aucune preuve** que les dépenses de l'État aident à prévoir le spread OAT-Bund, le taux OAT ou le CAC 40. Le résultat reste le même avec les trois modèles, avec un décalage de publication d'un, deux ou trois mois, et dans les dix-neuf extensions une fois les tests multiples corrigés.
 
-Cette réponse a une portée précise. Elle ne dit pas que les dépenses n'ont aucun lien avec les marchés : avec 79 mois de test, un lien faible ou modéré pourrait nous échapper (section 4.3). Elle porte sur l'exécution mensuelle du budget de l'État, pas sur les annonces budgétaires. Nous écrivons donc « pas de preuve (pour l'instant) » plutôt que « les dépenses ne permettent pas de prédire » : la première formulation décrit ce que nos tests montrent, la seconde affirmerait une impossibilité que nos données ne peuvent pas établir.
+Encore faut-il bien lire ce résultat. Nous ne montrons pas que les dépenses n'ont aucun lien avec les marchés. Avec 79 mois de test, un lien faible ou moyen pourrait nous échapper (section 4.3). Nous ne regardons d'ailleurs que l'exécution mensuelle du budget de l'État, ni les annonces budgétaires ni l'ensemble des administrations publiques. C'est pour cela que nous parlons d'absence de preuve plutôt que d'impossibilité : la première formule décrit ce que nos tests montrent, la seconde irait plus loin que ce que nos données permettent de dire.
 
-Un second constat dépasse la question des dépenses : aucun des modèles principaux ne bat la moyenne historique, même sans les dépenses (tableau 3.2). Pour les deux taux, la prévision « pas de variation le mois prochain » fait mieux que la moyenne et que tous nos modèles, même si l'écart n'est significatif que dans deux cas sur six (section 3.2). Ce résultat rejoint celui de Welch et Goyal (2008) : la plupart des prédicteurs proposés pour les marchés financiers ne battent pas une référence simple hors échantillon.
+Un second constat dépasse la question des dépenses : **aucun modèle ne bat la moyenne historique**, même sans elles. Pour les taux, prévoir simplement « pas de variation le mois prochain » fait mieux que la moyenne et mieux que tous nos modèles, même si l'écart n'est significatif que dans quelques cas. À un mois, ces marchés restent très difficiles à prévoir avec les variables dont nous disposons.
 
-## 4.2 Pourquoi les dépenses n'aident pas : trois hypothèses
+## 4.2 Pourquoi les dépenses n'aident pas : des pistes
 
-Nous proposons trois explications. Elles ne s'excluent pas, et aucune n'est démontrée.
+Plusieurs explications sont possibles, et elles peuvent se cumuler. Aucune n'est démontrée par nos tests, mais certaines sont mieux appuyées que d'autres. Pour chacune, nous indiquons ce qui la soutient et ce qui la limite.
 
-### L'information est déjà connue au moment de la publication
+### L'information est peut-être déjà connue
 
-Le budget de l'État est en principe voté avant le début de l'année, dans la loi de finances initiale : les marchés connaissent l'essentiel du plan de dépenses avant la première situation mensuelle. Publiée deux mois plus tard, celle-ci confirmerait surtout ce qui était attendu. Or un prix de marché réagit à l'information nouvelle, pas à ce qui est déjà prévu (Fama, 1970). Ramey (2011) montre que les chocs de dépenses publiques sont en partie anticipés : ce qui compte est le moment de l'annonce, non celui de la dépense. Leeper et al. (2013) montrent de même que l'anticipation des mesures budgétaires fausse l'estimation de leurs effets quand on ne la prend pas en compte, et Attinasi et al. (2009) que, pendant la crise de 2007-2009, l'annonce des plans de sauvetage bancaire a pesé sur les spreads alors que le montant engagé n'a pas d'effet significatif. Notre extension E4 va dans le même sens : même l'écart entre l'exécution et le budget voté, qui mesure une forme de surprise, n'améliore pas la prévision (section 3.5).
+Le budget de l'État est voté en décembre pour l'année suivante. Les marchés peuvent donc connaître le plan de dépenses avant même le début de l'année, et la situation mensuelle, publiée deux mois plus tard, ne ferait alors que confirmer ce qui était prévu. Or un prix réagit à ce qui est nouveau, pas à ce qui est attendu (Fama, 1970). Ramey (2011) le montre pour les dépenses publiques : ce qui compte est le moment où elles sont annoncées, plus que celui où elles sont engagées. Attinasi et al. (2009) observent la même chose pendant la crise de 2007-2009, où ce sont les annonces de plans de sauvetage bancaire qui ont pesé sur les spreads, pas les montants. Notre extension E4 va dans le même sens : même l'écart entre l'exécution et le budget voté, qui mesure une forme de surprise, n'améliore pas la prévision.
 
-Cette explication reste une hypothèse : la tester demanderait une étude d'événement, que nous n'avons pas pu réaliser faute de taux quotidiens accessibles (sections 4.7 et 4.8).
+Une vérification préliminaire, du type étude d'événement (MacKinlay, 1997), conforte cette idée sans la démontrer. Sur les 40 publications que nous avons pu dater (2017-2026), le CAC 40 ne réagit pas, le jour même, à la variation du solde publiée (corrélation de -0,13, p = 0,42, section 3.5 et annexe F). Ce test ne porte pas sur le spread, faute de taux quotidiens accessibles, et avec si peu d'événements il n'aurait repéré qu'une réaction forte. Le vrai test serait d'observer le spread lui-même le jour de chaque publication (sections 4.7 et 4.8).
 
-### Les grands mouvements du spread auraient d'autres causes
+### Ce qui fait bouger le spread n'est pas budgétaire
 
-Les plus fortes variations mensuelles du spread OAT–Bund coïncident avec des événements politiques ou mondiaux (section 3.1) : le début de la crise du Covid-19 en mars 2020 (+20,5 pb), la campagne présidentielle de 2017 (+16,3 pb en février, puis -18,1 pb en mai, après le second tour du 7 mai) et l'annonce de la dissolution de l'Assemblée nationale le 9 juin 2024 (+15,5 pb). Ce sont des variations de moyennes mensuelles : un choc de fin de mois peut apparaître en partie le mois suivant. Le cas de juin 2024 concerne bien les finances publiques, mais par un canal politique : l'incertitude sur la trajectoire budgétaire. C'est une anticipation sur l'avenir, absente de toute ligne de dépense déjà exécutée.
+Les plus fortes variations mensuelles du spread tombent en mars 2020 (+20,5 pb), en février et mai 2017 (+16,3 et −18,1 pb) et en juin 2024 (+15,5 pb). Ce sont les mois du début de la crise du Covid-19, de la campagne présidentielle de 2017 et de l'annonce de la dissolution de l'Assemblée nationale le 9 juin 2024. Ce dernier épisode touche bien aux finances publiques, mais par la politique : les investisseurs craignent qu'une nouvelle majorité ne tienne pas la trajectoire budgétaire. C'est une anticipation sur l'avenir, que l'on ne peut lire dans aucune ligne de dépense déjà exécutée.
 
-### Une variable lente pour une cible rapide
+### Le retard de publication n'est pas en cause
 
-Les dépenses publiques évoluent sur plusieurs années, alors que le spread, le taux OAT et le CAC 40 réagissent en quelques jours : nous prévoyons un mouvement rapide avec une information lente, disponible avec deux mois de retard. La littérature européenne trouve pourtant un lien entre finances publiques et spreads (Bernoth et al., 2012 ; Afonso et al., 2015). Ce n'est pas une contradiction : ces études **expliquent le niveau** des spreads, avec des panels de pays et des périodes qui incluent la crise de la dette, alors que nous cherchons à **prévoir leur variation** le mois suivant, hors échantillon. Le panel annuel (E17) teste une fréquence plus basse et ne fait pas mieux, mais il ne compte que 75 prévisions (section 3.6).
+On pourrait penser que les dépenses n'aident pas simplement parce que l'information arrive trop tard, deux mois après les faits. Nous l'avons vérifié : avec un décalage d'un mois seulement, plus favorable aux dépenses, aucun R² ne devient positif (le meilleur vaut -0,7 %) et la plus petite p-value corrigée est de 0,81 (section 3.3). Avec trois mois, elle est de 0,51, et aucun R² n'est positif non plus. Le problème ne tient donc pas à la fraîcheur des chiffres.
 
-Enfin, la France n'a pas connu de crise de la dette entre 2014 et 2026, contrairement à l'Italie ou à l'Espagne en 2011-2012. Afonso et al. (2015) montrent que les marchés sanctionnent beaucoup plus fortement les déficits attendus à partir de mars 2009 : le lien dépend de la période, et les dépenses ne comptent peut-être qu'en période de tension. Dans le panel trimestriel, ajouter les dépenses améliore le R² de Ridge de 3 à 4 points sur 2010-2014 et le dégrade de 11 à 13 points après 2015 (section 3.6). Ces écarts ne sont toutefois pas testés, et l'extension avec interactions de tension (E18) ne les confirme pas.
+### Le sens de l'effet n'est pas évident
+
+La théorie elle-même ne dit pas dans quel sens les dépenses devraient jouer. Une hausse financée par l'emprunt peut faire monter les taux, comme le prévoit la vision keynésienne, ou rester sans effet si les ménages anticipent les impôts futurs, selon l'équivalence ricardienne de Barro (1974), comme le rappelle la section 1.1.1. Si l'effet change de signe d'une période à l'autre, il peut s'annuler dans un modèle estimé sur toute la période. Nous avons tenté d'en tenir compte avec des interactions selon le régime de taux (E5) et selon les périodes de tension (E18). Elles n'améliorent pas la prévision, mais cela ne prouve pas que l'effet est absent dans chaque régime : chaque sous-période contient trop peu de mois pour en juger.
+
+### Une information lente et tardive pour une cible rapide
+
+Les dépenses de l'État reflètent des décisions prises à l'avance et évoluent plus lentement que les marchés, qui réagissent en quelques jours. Nous essayons donc de prévoir un mouvement rapide avec une information lente, qui arrive de surcroît avec deux mois de retard.
+
+La littérature européenne trouve pourtant un lien entre finances publiques et spreads (Bernoth et al., 2012 ; Afonso et al., 2015). Ce n'est pas une contradiction : ces études expliquent le niveau des spreads, en panel et souvent en période de crise, alors que nous cherchons à prévoir la variation du mois suivant, hors échantillon. La France n'a pas connu de crise de la dette sur notre période, contrairement à l'Italie ou à l'Espagne en 2011-2012, et Afonso et al. (2015) montrent que les marchés sanctionnent surtout les finances publiques quand la tension monte. Notre panel trimestriel va un peu dans ce sens : entre 2010 et 2014, ajouter les dépenses améliore le R² de Ridge de 4 points, alors qu'il le dégrade de près de 13 points après 2015 (section 3.6). Ces écarts ne sont toutefois pas testés, et le modèle avec interactions de crise (E18) ne les confirme pas.
 
 ## 4.3 Ce que le résultat négatif veut dire, et ce qu'il ne veut pas dire
 
-Un résultat négatif n'a de valeur que si l'on sait ce que le test aurait pu détecter. Trois contrôles permettent d'en juger.
+Un résultat négatif ne vaut que si l'on sait ce que le test aurait été capable de détecter. Quatre éléments permettent d'en juger.
 
-### Ce que le test aurait trouvé : la puissance
+### La puissance du test
 
-Le contrôle positif (section 3.3, tableau 3.4) ajoute à M0 une variable fictive corrélée à la cible. Avec une corrélation de 0,5, le modèle bat la moyenne historique dans 80 à 100 % des tirages ; avec une corrélation de 0,3, dans 20 à 30 % seulement. Notre dispositif repère donc un signal fort, mais manquerait souvent un signal modéré.
+Le contrôle positif (section 3.3) ajoute à M0 une variable fictive corrélée à la cible. Avec une corrélation de 0,5, le modèle bat la moyenne historique dans 80 à 100 % des tirages ; avec 0,3, dans 20 à 30 % seulement. Notre dispositif repère donc un signal fort, mais il passerait souvent à côté d'un signal moyen. Nos tests écartent un fort pouvoir prédictif des dépenses, pas un effet faible. La raison principale est la taille de l'échantillon : les séries budgétaires ouvertes commencent en 2013, ce qui ne laisse que 79 mois de test, d'autant que nous avons fait commencer le test en 2020 pour garder assez de mois d'entraînement.
 
-Nos tests écartent un pouvoir prédictif fort des dépenses, mais pas un effet faible. La cause principale est la taille de l'échantillon : les séries budgétaires ouvertes commencent en 2013, ce qui laisse 79 mois de test, le choix de commencer le test en 2020 pour garder assez d'entraînement y contribuant aussi.
+### Plus de données suffiraient-elles ?
 
-### Ce que fait du pur bruit : le contrôle négatif
+On pourrait croire qu'il suffirait d'ajouter des données. Nos panels vont plutôt contre cette idée. E15 compte 330 prévisions trimestrielles, E16 en compte 874 avec 150 variables, dont 18 de finances publiques, et les finances publiques n'y améliorent aucune prévision (p de 0,08 à 0,81). Davantage de données rendrait le test plus sensible et permettrait de repérer un effet plus faible. Rien n'indique en revanche qu'elles feraient apparaître un fort pouvoir prédictif que nous n'avons pas trouvé.
 
-Quand on remplace les sept dépenses par sept variables tirées au hasard, 90 à 95 % des tirages de bruit font au moins aussi bien que les vraies dépenses avec Ridge (section 3.3). Les petites différences entre M1 et M0 ne sont donc pas propres aux dépenses.
+### Le contrôle négatif
 
-Le même contrôle change la lecture de l'importance des variables. Les dépenses pèsent 31 à 37 % de l'importance SHAP, ce qui paraît beaucoup, mais sept variables de bruit en obtiennent en moyenne 34 à 38 % (tableau 3.5). Cela rejoint les mises en garde sur la fiabilité des mesures d'importance des forêts aléatoires (Strobl et al., 2007) : une part d'importance élevée dans un modèle d'arbres ne prouve pas qu'une variable est utile. Sans comparaison à du bruit, ces mesures peuvent tromper.
+Quand on remplace les sept dépenses par sept variables tirées au hasard, 90 à 95 % des tirages de bruit font au moins aussi bien que les vraies dépenses avec Ridge. Les petits écarts entre M1 et M0 ne sont donc pas propres aux dépenses : n'importe quelles variables ajoutées produisent des écarts du même ordre. Ce contrôle change aussi la lecture de l'importance des variables. Les dépenses pèsent 31 à 37 % de l'importance SHAP, ce qui paraît beaucoup, mais du bruit en obtient 34 à 38 %. Une part d'importance élevée dans un modèle d'arbres ne prouve donc pas qu'une variable est utile, d'autant que ces mesures peuvent être biaisées dans les forêts aléatoires (Strobl et al., 2007).
 
-### Contre quoi comparer : le choix de la référence
+### Le choix de la référence
 
-Pour les taux, la prévision « pas de variation » bat la moyenne historique (tableau 3.2) : la moyenne n'est donc pas la référence la plus exigeante. Le panel trimestriel (E15) montre un autre piège : un R² de +15 % venait du fait que la cible était une moyenne sur le trimestre, en partie prévisible de façon mécanique (Working, 1960) ; l'autocorrélation d'ordre 1 passe de 0,32 en moyenne trimestrielle à 0,07 en fin de trimestre, et le R² devient négatif (section 3.6). Nos cibles de taux sont aussi des moyennes mensuelles, ce qui justifie d'inclure toujours la variation passée dans les modèles.
+Pour les taux, la prévision « pas de variation » bat la moyenne historique : la moyenne n'est donc pas la référence la plus exigeante. Le panel trimestriel (E15) montre un autre piège. Son R² de +15 % venait de ce que la cible était une moyenne sur le trimestre, en partie prévisible par construction (Working, 1960) ; avec le spread de fin de trimestre, il devient négatif. Un bon score ne suffit pas : il faut le comparer à une référence simple et à du bruit, et vérifier que la cible ne contient pas de régularité mécanique.
 
-Ces trois points ont un même message : un bon score ne suffit pas, il faut le comparer à une référence simple et à du bruit.
+## 4.4 Retour sur les modèles
 
-## 4.4 Retour sur les modèles : pourquoi le machine learning ne fait pas mieux, et ce qui reste prévisible
+### Les arbres ne font pas mieux que Ridge (H3)
 
-### Pourquoi les modèles d'arbres font moins bien que Ridge (H3)
+On pouvait espérer que le machine learning trouve des relations non linéaires que la régression ne voit pas. Ce n'est pas le cas : XGBoost est le moins bon des trois modèles et la forêt aléatoire ne fait pas mieux que Ridge. Deux raisons peuvent l'expliquer.
 
-On aurait pu attendre du machine learning qu'il trouve des relations non linéaires que la régression ne voit pas, comme dans les travaux sur les rendements d'actions (Gu et al., 2020). C'est l'inverse : XGBoost est le moins bon des trois modèles, et la forêt aléatoire ne fait pas mieux que Ridge (tableau 3.3). Deux éléments peuvent l'expliquer.
+La première tient au rapport entre le signal et le bruit. Avec 70 à 148 mois d'entraînement et des cibles très bruitées, un modèle flexible peut s'ajuster à des coïncidences de l'échantillon d'apprentissage qui ne se reproduisent pas ensuite. L'instabilité de XGBoost, dont le R² varie d'environ 9 points selon la seule graine aléatoire, va dans ce sens.
 
-Le premier est le rapport entre signal et bruit. Avec 70 à 148 mois d'entraînement et des cibles très bruitées, un modèle flexible trouve surtout des coïncidences qui ne se répètent pas. L'instabilité de XGBoost en est un indice : son R² varie d'environ 9 points selon la seule graine aléatoire (section 3.3).
+La seconde tient au fonctionnement de Ridge. Quand il ne trouve pas de signal, il augmente sa pénalité et ramène sa prévision vers la moyenne. Pour le CAC 40, la pénalité dépasse 10 000 dans 27 % des mois (M0) à 44 % (M1), et Ridge devient presque la moyenne historique, d'où un R² proche de zéro (−1,3 %). Le « meilleur » modèle est donc celui qui renonce le plus à prévoir. Bouillot et al. (2025) font une observation voisine : pour la Belgique et l'Espagne, une régression pénalisée (LASSO, Elastic Net) a un RMSE plus faible que XGBoost. Le machine learning n'est pas inutile pour autant, mais il lui faut plus d'observations ou un signal plus fort que ce que nos données offrent à un mois.
 
-Le second est le comportement de Ridge (Hoerl et Kennard, 1970). Quand il ne trouve pas de signal, Ridge augmente sa pénalité et rapproche sa prévision de la moyenne. C'est ce qui se passe pour le CAC 40 : avec les jeux M0 et M1, la pénalité choisie dépasse 10 000 dans 27 à 44 % des mois (90 % avec M2), alors qu'elle reste inférieure à 100 dans 72 à 100 % des mois pour le spread. Ridge devient alors presque la moyenne historique, d'où son R² proche de zéro (-1,3 %) : le « meilleur » modèle est celui qui renonce le plus à prévoir. Bouillot et al. (2025) observent aussi que des régressions pénalisées font mieux que XGBoost dans certains pays. Le machine learning demande plus d'observations et un signal plus fort que ce que nos données offrent à un mois.
+### L'importance des variables ne dit rien ici (H4)
 
-### Pourquoi l'importance des variables ne dit rien ici (H4)
-
-L'hypothèse H4 supposait que la charge de la dette et les dépenses d'intervention seraient les plus prédictives. Les valeurs SHAP semblaient d'abord aller dans ce sens, avec les dépenses d'intervention en tête parmi les dépenses pour le spread et l'OAT (figure 3.3). Mais des variables de pur bruit obtiennent la même part d'importance, et mélanger les dépenses sur la période de test n'augmente pas l'erreur (section 3.4). Un modèle d'arbres utilise toutes les variables qu'on lui donne, même inutiles.
+Les valeurs SHAP semblaient d'abord donner raison à H4, avec les dépenses d'intervention en tête parmi les dépenses. Mais des variables de pur bruit obtiennent la même part d'importance, et mélanger les dépenses sur la période de test n'augmente pas l'erreur. Un modèle d'arbres utilise toutes les variables qu'on lui donne, même inutiles : il faut toujours comparer leur importance à celle du bruit avant de conclure.
 
 ### Ce qui reste prévisible
 
-Le résultat n'est pas entièrement négatif : certaines extensions battent la moyenne, sans que les dépenses y apportent un gain significatif (tableau 3.6).
-
-- **La volatilité** (E3 : R² de +9,6 % pour le CAC 40 et +3,3 % pour l'OAT, sans les dépenses). C'est cohérent avec un fait bien connu : les périodes agitées se suivent (Engle, 1982). On prévoit mieux l'intensité d'un mouvement que sa direction.
-- **Le sens de variation de l'OAT** (E2 : score de Brier +2,5 % sans les dépenses, +5,8 % avec, sans différence significative).
-- **Le CAC 40 à 12 mois** (E1 : +11,8 % sans les dépenses). Ce résultat est fragile : il repose sur 68 prévisions qui se chevauchent.
-
-Ce qui est prévisible semble donc venir des marchés eux-mêmes plutôt que du budget de l'État.
+Quelques extensions battent la moyenne, sans que les dépenses y apportent un gain significatif : la volatilité (E3 : +9,6 % pour le CAC 40, +3,3 % pour l'OAT), le sens de variation de l'OAT (E2 : score de Brier +2,5 %) et le CAC 40 à 12 mois (E1 : +11,8 %). Ce dernier résultat est fragile, puisqu'il repose sur 68 prévisions qui se chevauchent. Que la volatilité soit en partie prévisible n'a rien d'étonnant : les périodes agitées ont tendance à se suivre (Engle, 1982). Ce qui se prévoit un peu semble donc venir des marchés eux-mêmes plus que du budget.
 
 ## 4.5 Comparaison avec la littérature
 
-### Bouillot, Candelon et Kool (2025) : un R² élevé n'est pas une bonne prévision
+### Bouillot, Candelon et Kool (2025)
 
-L'étude la plus proche de la nôtre annonce d'excellents résultats : un R² de 0,81 à 0,99 selon les pays (0,86 pour la France), et une erreur de 7,3 points de base pour la France sur 2020-2025. Nos résultats semblent contraires aux leurs, mais ils ne mesurent pas la même chose.
+L'étude la plus proche de la nôtre annonce un R² de 0,81 à 0,99 selon les pays (0,86 pour la France) et une erreur de 7,3 points de base pour la France sur 2020-2025. Nos résultats semblent contredire les leurs, mais nous ne mesurons pas la même chose. Ces auteurs prévoient le niveau du spread. Or le spread d'un mois ressemble beaucoup à celui du mois précédent, et recopier simplement le dernier spread donne déjà un R² très élevé face à la moyenne. Leur propre analyse montre d'ailleurs que le spread passé domine les prévisions dans tous les pays. Dans la version de leur document de travail que nous avons consultée, les treize méthodes sont comparées entre elles et à la moyenne, mais pas à la marche aléatoire. Le résumé d'une version plus récente indique que l'AR(1) et la marche aléatoire ont des erreurs plus faibles que les modèles de machine learning dans chaque pays, quand ceux-ci sont réestimés à chaque date.
 
-Bouillot et al. prévoient le **niveau** du spread, mesurent leur R² par rapport à la moyenne et comparent treize méthodes entre elles (régressions pénalisées, arbres, réseaux de neurones), sans comparaison à la marche aléatoire. Or le spread d'un mois est très proche de celui du mois précédent. Un modèle qui recopie simplement le dernier spread obtient déjà un R² très élevé face à la moyenne. Leur propre analyse le confirme : le spread passé est la variable dominante dans tous les pays.
+Nos résultats vont dans le même sens. Dans notre panel européen (E16), nous retrouvons un R² de 92 à 97 % sur le niveau du spread, mais tous nos modèles font moins bien que la marche aléatoire (pour XGBoost, une erreur de 21,1 points de base contre 18,4). Sur la France et sur la même période qu'eux (janvier 2020 à février 2025), la marche aléatoire a une erreur de 5,1 points de base dans nos données, contre 7,3 pour leur XGBoost. La comparaison est à prendre avec prudence, car nos séries sont des moyennes mensuelles et leur définition du spread peut être différente. Un R² sur le niveau ne suffit donc pas à juger une prévision : la comparaison à la marche aléatoire est indispensable. Autre point commun, les finances publiques pèsent très peu chez eux aussi, avec une seule variable de finances publiques parmi les cinq plus importantes de chacun des dix pays, soit 50 au total. Notre apport est d'isoler les dépenses en comparant le même modèle avec et sans elles. Sur le machine learning, en revanche, nous ne retrouvons pas leur résultat, puisque XGBoost est le moins bon de nos modèles (H3).
 
-Nous avons testé cette comparaison de deux façons. Dans notre panel européen (E16), nous retrouvons un R² de 92 à 97 % sur le niveau du spread, comme eux ; mais tous nos modèles font moins bien que la marche aléatoire (XGBoost : erreur de 21,1 points de base contre 18,4, tableau 3.7). Sur la France et la même période qu'eux (janvier 2020 à février 2025), la marche aléatoire a une erreur de 5,1 points de base dans nos données, contre 7,3 pour leur XGBoost ; cette comparaison doit être lue avec prudence, car nos séries sont des moyennes mensuelles et leur définition du spread peut différer.
+### Welch et Goyal (2008)
 
-Notre conclusion n'est pas que leur travail est faux, mais qu'un R² sur le niveau ne suffit pas à juger une prévision : la comparaison à la marche aléatoire est indispensable. Un point commun mérite d'être noté : chez eux aussi, les finances publiques pèsent très peu (une seule variable de finances publiques parmi les cinq plus importantes de chacun des dix pays, soit 50 au total).
+Welch et Goyal montrent que la plupart des variables proposées pour prévoir la bourse américaine ne battent pas la moyenne historique hors échantillon. Nos résultats sur le CAC 40 vont dans le même sens, et la même difficulté se retrouve pour le spread et le taux OAT à un mois.
 
 ### Les autres études européennes
 
-Afonso et al. (2015) et Bernoth et al. (2012) trouvent un lien entre finances publiques et spreads, mais sur le niveau des spreads et des périodes qui incluent la crise de la dette (section 4.2). Belly et al. (2023) trouvent que le machine learning suit mieux les spreads que les modèles économétriques, y compris en variation mensuelle, sur 2004-2019. Notre question est différente : nous testons l'apport d'un bloc de variables, pas la supériorité d'une famille de modèles, et nous ne trouvons pas d'avantage du machine learning (H3).
-
-Enfin, Garlanda-Longueville (2023) étudie, avec des données quotidiennes, les allocutions du président de la République pendant la crise du Covid, qui contenaient des engagements budgétaires : ces annonces ont en général fait baisser le spread. Ce résultat est compatible avec le nôtre : ce sont peut-être les annonces, observées au jour le jour, qui font bouger les marchés, plutôt que l'exécution mensuelle publiée deux mois plus tard.
+Afonso et al. (2015) et Bernoth et al. (2012) trouvent un lien entre finances publiques et spreads, mais sur des périodes qui incluent la crise de la dette, et pour expliquer le niveau des spreads (section 4.2). Belly et al. (2023) montrent que le machine learning suit mieux les spreads que les modèles économétriques sur 2004-2019. Leur question porte sur la supériorité d'une famille de modèles, la nôtre sur l'apport d'un bloc de variables. Garlanda-Longueville (2023) observe, en données quotidiennes, un effet des allocutions du président de la République pendant la crise du Covid sur le CAC 40 et sur le spread. Ce résultat rejoint le nôtre : il suggère que ce sont les annonces, suivies au jour le jour, qui font bouger les marchés, plutôt que l'exécution mensuelle publiée deux mois plus tard.
 
 ## 4.6 Implications
 
-**Pour la recherche.** Un résultat de prévision doit toujours être comparé à une référence naïve (moyenne historique et, pour les taux, variation nulle) et à du bruit. Sans ces deux repères, un R² élevé sur un niveau ou une forte part d'importance SHAP peuvent donner une impression de pouvoir prédictif qui n'existe pas. Publier les résultats négatifs, avec des contrôles de puissance, évite que la littérature ne retienne que les configurations qui semblent marcher (Bailey et al., 2014).
+Pour la recherche, un résultat de prévision devrait toujours être comparé à une référence simple (la moyenne historique et, pour les taux, la variation nulle) et à du bruit. Sans ces repères, un R² élevé sur un niveau ou une forte part d'importance SHAP peuvent faire croire à un pouvoir prédictif qui n'existe pas. Publier aussi les résultats négatifs, avec des contrôles de puissance, évite que la littérature ne retienne que les configurations qui semblent marcher.
 
-**Pour les investisseurs.** Nos résultats ne donnent pas de raison d'utiliser l'exécution mensuelle du budget de l'État pour prévoir le spread, le taux OAT ou le CAC 40 à un mois. Ils n'indiquent pas que les finances publiques sont sans importance : l'information utile semble plutôt se trouver dans les annonces et les anticipations.
+Pour les investisseurs, nos résultats ne donnent aucune raison d'utiliser l'exécution mensuelle du budget de l'État pour prévoir le spread, le taux OAT ou le CAC 40 à un mois. Ils ne disent pas pour autant que les finances publiques sont sans importance pour les marchés : l'information utile se trouve sans doute plutôt dans les annonces et les anticipations.
 
-**Pour les producteurs de données ouvertes.** Un calendrier de publication archivé et la conservation des versions successives des chiffres permettraient de travailler avec l'information réellement disponible à chaque date (Croushore, 2011).
+Pour les producteurs de données ouvertes, enfin, un calendrier de publication archivé et la conservation des versions successives des chiffres permettraient de travailler avec l'information réellement disponible à chaque date.
 
 ## 4.7 Limites
 
-### Limites des données
+Plusieurs limites tiennent aux données. Nous utilisons la dernière version publiée des situations budgétaires, et non les chiffres connus à chaque date ; ceux de décembre, en particulier, sont d'abord provisoires. Le décalage de publication de deux mois n'a pu être vérifié que sur 40 publications (2017-2026) et reste une hypothèse pour les autres mois, même si les résultats ne changent pas avec un décalage d'un ou de trois mois (section 3.3). Les données ne couvrent que le budget de l'État, sans la Sécurité sociale ni les collectivités, et ne sont pas ventilées par mission. Le spread et le taux OAT sont des moyennes du mois (OCDE), alors que le CAC 40 est pris en fin de mois, et les variations de moyennes sont un peu autocorrélées par construction. Enfin, l'écart cumulé des variables budgétaires varie beaucoup plus en fin d'année : son écart-type est en médiane 6,3 fois plus grand en décembre qu'en janvier.
 
-- **Données révisées.** Nous utilisons la dernière version publiée des situations budgétaires, et non les chiffres connus à chaque date (les montants de décembre sont d'abord provisoires).
-- **Date de publication.** Le décalage de deux mois est vérifié sur 2023-2026 seulement ; pour 2014-2022, c'est une hypothèse. Les résultats ne changent pas avec un décalage d'un ou de trois mois (section 3.3).
-- **Périmètre.** Les données couvrent le budget de l'État, pas la Sécurité sociale ni les collectivités locales, et ne sont pas ventilées par mission.
-- **Cibles de taux en moyennes mensuelles**, alors que le CAC 40 est pris en fin de mois : les variations de moyennes sont légèrement autocorrélées de façon mécanique.
-- **Variables budgétaires hétérogènes dans l'année.** En médiane, l'écart-type de l'écart cumulé en décembre est 6,3 fois celui de janvier.
+D'autres limites tiennent à la méthode. Avec 70 à 148 mois d'entraînement et 79 mois de test, seul un effet fort pouvait être détecté, et les écarts de quelques points de R² entre deux modèles ne sont pas interprétables. Les hyperparamètres ont été fixés à des valeurs usuelles, sans réglage sur la période de test, mais le code et les résultats des modèles principaux ont été enregistrés ensemble : nous ne pouvons pas prouver qu'ils ont été choisis avant de voir les résultats, alors que les extensions, elles, ont un plan daté avant leur exécution. Les chiffres de XGBoost et de la forêt aléatoire dépendent aussi des versions des bibliothèques logicielles, même si les conclusions n'en dépendent pas. Les extensions E17 à E20 ont été ajoutées après avoir vu les résultats d'E15 et E16, et E18 est exploratoire. Pour E16, 25 des 68 séries de l'OCDE ne sont plus mises à jour depuis fin 2022 ou début 2024, si bien qu'environ 23 % des valeurs de la fin de la période de test sont complétées. Pour E19, les prix des actions n'incluent pas les dividendes.
 
-### Limites de méthode
-
-- **Petit échantillon.** Avec 70 à 148 mois d'entraînement et 79 mois de test, seul un effet fort pouvait être détecté (section 4.3). Les écarts de quelques points de R² entre deux modèles ne sont pas interprétables.
-- **Hyperparamètres.** Ils ont été fixés à des valeurs usuelles, sans réglage sur la période de test, mais le code et les résultats des modèles principaux ont été enregistrés ensemble : nous ne pouvons pas prouver qu'ils ont été choisis avant de voir les résultats. Seules les extensions ont un plan daté avant leur exécution.
-- **Instabilité de XGBoost.** Son R² varie d'environ 9 points selon la graine ; les conclusions ne changent pas, mais les chiffres précis dépendent aussi des versions des bibliothèques logicielles.
-- **Extensions ajoutées en cours de route.** E17 à E20 ont été ajoutées après avoir vu les résultats d'E15 et E16, et E18 est explicitement exploratoire. E14 (étude d'événement) n'a pas pu être réalisée : l'explication « l'information est déjà connue » (section 4.2) reste donc une hypothèse.
-- **Panel européen et actions.** Pour E16, 25 des 68 séries de l'OCDE ne sont plus mises à jour depuis fin 2022 ou début 2024, ce qui conduit à compléter environ 23 % des valeurs de la fin de la période de test. Pour E19, les prix des actions n'incluent pas les dividendes.
+La limite la plus importante pour l'interprétation reste l'absence d'étude d'événement sur le spread. E14 n'a pas pu être réalisée sur le spread, et sa version sur le CAC 40, faite après coup (annexe F), ne repose que sur les 40 publications que nous avons pu dater. L'explication « l'information est déjà connue » (section 4.2) reste donc une hypothèse.
 
 ## 4.8 Recherches futures
 
-- **Étude d'événement.** Avec des taux quotidiens (Banque de France, Bundesbank) et les dates exactes de publication des situations budgétaires, on pourrait mesurer la réaction du spread le jour même, selon la méthode des études d'événement (MacKinlay, 1997). C'est le test direct de l'explication « l'information est déjà connue ». Garlanda-Longueville (2023) montre qu'une approche à fréquence quotidienne trouve des effets pour les annonces liées au Covid.
-- **Les annonces plutôt que l'exécution.** Le projet de loi de finances, les lois de finances rectificatives et les programmes de stabilité sont de l'information nouvelle pour les marchés : ils pourraient être codés comme des surprises, par exemple l'écart entre le déficit annoncé et les prévisions des économistes.
-- **Données en temps réel.** Conserver chaque version publiée des situations budgétaires permettrait de travailler avec l'information disponible à chaque date (Croushore, 2011).
-- **Plus d'observations.** Un panel de pays plus long, incluant la crise de 2010-2012, avec des cibles de fin de période, augmenterait la puissance des tests.
-- **Ventilation sectorielle.** Les données de la commande publique permettraient de relier la dépense aux entreprises qui en bénéficient et de mieux tester le canal des actions sectorielles (E19).
+La suite la plus directe serait une étude d'événement sur le spread : avec des taux quotidiens et les dates exactes de publication des situations budgétaires, on pourrait mesurer la réaction du marché le jour même et tester directement l'idée que l'information est déjà connue.
+
+Il serait aussi intéressant d'étudier les annonces plutôt que l'exécution. Le projet de loi de finances, les lois de finances rectificatives et les programmes de stabilité apportent de l'information nouvelle aux marchés. On pourrait les coder comme des surprises, par exemple par l'écart entre le déficit annoncé et les prévisions des économistes.
+
+Trois autres pistes viendraient compléter ce travail : conserver chaque version publiée des situations budgétaires pour travailler en temps réel ; utiliser un panel de pays plus long, incluant la crise de 2010-2012, avec des cibles de fin de période plutôt que des moyennes ; et s'appuyer sur les données de la commande publique pour relier la dépense aux entreprises qui en bénéficient, ce qui permettrait de mieux tester le canal des actions sectorielles (E19).
 
 ## Références ajoutées par ce chapitre
 
-- Engle, R. F. (1982). Autoregressive conditional heteroscedasticity with estimates of the variance of United Kingdom inflation. *Econometrica*, *50*(4), 987–1007. https://doi.org/10.2307/1912773
-- Leeper, E. M., Walker, T. B., & Yang, S.-C. S. (2013). Fiscal foresight and information flows. *Econometrica*, *81*(3), 1115–1145. https://doi.org/10.3982/ECTA8337
-- MacKinlay, A. C. (1997). Event studies in economics and finance. *Journal of Economic Literature*, *35*(1), 13–39.
-- Strobl, C., Boulesteix, A.-L., Zeileis, A., & Hothorn, T. (2007). Bias in random forest variable importance measures: Illustrations, sources and a solution. *BMC Bioinformatics*, *8*, Article 25. https://doi.org/10.1186/1471-2105-8-25
-- Working, H. (1960). Note on the correlation of first differences of averages in a random chain. *Econometrica*, *28*(4), 916–918.
+- MacKinlay, A. C. (1997). Event studies in economics and finance. *Journal of Economic Literature*, 35(1), 13–39. [https://www.jstor.org/stable/2729691](https://www.jstor.org/stable/2729691)
+- Strobl, C., Boulesteix, A.-L., Zeileis, A., & Hothorn, T. (2007). Bias in random forest variable importance measures: Illustrations, sources and a solution. *BMC Bioinformatics*, 8, Article 25. [https://doi.org/10.1186/1471-2105-8-25](https://doi.org/10.1186/1471-2105-8-25)
+- Engle, R. F. (1982). Autoregressive conditional heteroscedasticity with estimates of the variance of United Kingdom inflation. *Econometrica*, 50(4), 987–1007. [https://doi.org/10.2307/1912773](https://doi.org/10.2307/1912773)
+- Working, H. (1960). Note on the correlation of first differences of averages in a random chain. *Econometrica*, 28(4), 916–918. [https://doi.org/10.2307/1907574](https://doi.org/10.2307/1907574)

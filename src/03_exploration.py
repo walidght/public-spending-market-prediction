@@ -12,15 +12,13 @@ Lancer depuis la racine du dépôt :  python src/03_exploration.py
 """
 
 from pathlib import Path
-import sys
 
 import matplotlib.pyplot as plt
+
+import fr_format  # noqa: F401  (virgule décimale dans les figures)
 import matplotlib.dates as mdates
 import numpy as np
 import pandas as pd
-
-sys.path.insert(0, str(Path(__file__).parent))
-from fr_format import fr  # noqa: E402  (virgule décimale dans les figures)
 from statsmodels.tsa.stattools import adfuller, acf
 
 DATA = Path("data/processed/dataset_monthly.csv")
@@ -111,7 +109,6 @@ def fig_spread_budget(df: pd.DataFrame) -> None:
 
     fig.text(0, -0.02, "Sources : FRED (OCDE), DGFiP – situations mensuelles budgétaires. "
              "Taux : moyennes mensuelles.", fontsize=8, color=INK2)
-    fr(fig)
     fig.savefig(FIG / "fig3_1_spread_budget.png")
     plt.close(fig)
 
@@ -131,7 +128,6 @@ def fig_target_distributions(df: pd.DataFrame) -> None:
                 transform=ax.transAxes, ha="right", va="top", fontsize=8, color=INK2)
         ax.grid(axis="x", visible=False)
     fig.tight_layout()
-    fr(fig)
     fig.savefig(FIG / "fig3_1_distributions_cibles.png")
     plt.close(fig)
 
@@ -166,7 +162,6 @@ def fig_correlations(df: pd.DataFrame) -> pd.DataFrame:
              f"(±{band:.2f}). Variables budgétaires : écart sur un an, décalées de 2 mois.",
              fontsize=8, color=INK2)
     fig.tight_layout()
-    fr(fig)
     fig.savefig(FIG / "fig3_1_correlations_budget.png")
     plt.close(fig)
 
